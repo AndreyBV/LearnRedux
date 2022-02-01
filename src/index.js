@@ -1,6 +1,6 @@
 // import { createStore } from './create-store';
 import { createStore, applyMiddleware } from 'redux';
-import { asyncIncrement, decrement, increment } from './redux/action';
+import { asyncIncrement, changeTheme, decrement, increment } from './redux/action';
 import { rootReducer } from './redux/rootReducer';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
@@ -27,7 +27,8 @@ const themeBtn = document.getElementById('theme');
 
 const store = createStore(
 	rootReducer,
-	0,
+	// ! Убираем начальное состояние, т.к. рут редьюсер теперь возвращает объект
+	// 0,
 	// applyMiddleware(thunk)
 	applyMiddleware(thunk, logger)
 );
@@ -52,13 +53,21 @@ asyncBtn.addEventListener('click', () => {
 	// ! Выход из ситуации: реализация редакс мидлвара (thunk)
 });
 
+themeBtn.addEventListener('click', () => {
+	const newTheme = document.body.classList.contains('light') ? 'dark' : 'light';
+	store.dispatch(changeTheme(newTheme));
+});
+
 store.subscribe(() => {
 	const state = store.getState();
 
-	counter.textContent = state;
-});
-store.dispatch({ type: 'INIT_APPLICATION' });
+	counter.textContent = state.counter;
+	// document.body.classList.toggle(state.theme.value);
+	document.body.classList = state.theme.value;
 
-themeBtn.addEventListener('click', () => {
-	document.body.classList.toggle('dark');
+	[addBtn, sub, asyncBtn, themeBtn].forEach(btn => {
+		btn.disabled = state.theme.disabled;
+	});
 });
+
+store.dispatch({ type: 'INIT_APPLICATION' });
