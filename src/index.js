@@ -14,16 +14,16 @@ const asyncBtn = document.getElementById('async');
 const themeBtn = document.getElementById('theme');
 
 // ! Реализация middleware
-function logger(state) {
-	return function (next) {
-		return function (action) {
-			console.log('Prev state', state.getState());
-			const newState = next(action);
-			// console.log('Next state', newState.getState());
-			return newState;
-		};
-	};
-}
+// function logger(state) {
+// 	return function (next) {
+// 		return function (action) {
+// 			console.log('Prev state', state.getState());
+// 			const newState = next(action);
+// 			// console.log('Next state', newState.getState());
+// 			return newState;
+// 		};
+// 	};
+// }
 
 const store = createStore(
 	rootReducer,
