@@ -1,6 +1,7 @@
 // import { createStore } from './create-store';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { asyncIncrement, changeTheme, decrement, increment } from './redux/action';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import { rootReducer } from './redux/rootReducer';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
@@ -30,7 +31,11 @@ const store = createStore(
 	// ! Убираем начальное состояние, т.к. рут редьюсер теперь возвращает объект
 	// 0,
 	// applyMiddleware(thunk)
-	applyMiddleware(thunk, logger)
+	// compose(
+	// 	applyMiddleware(thunk, logger),
+	// 	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+	// )
+	composeWithDevTools(applyMiddleware(thunk, logger))
 );
 
 // window.store = store;
